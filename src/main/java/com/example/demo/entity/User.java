@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,5 +36,14 @@ public class User {
 
     @Column(length = 15)
     private String phoneNumber;
+
+    @Column(name = "id_number")
+    private String idNumber;
+
+    @Column(name = "user_roles")
+    private String userRoles;
+
+    @Column(name = "is_active", columnDefinition = "boolean default false")
+    private boolean isActive;
 
 }
