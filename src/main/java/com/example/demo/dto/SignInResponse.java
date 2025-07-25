@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,4 +12,6 @@ public class SignInResponse {
     private String message;
     private String username;
     private boolean authenticated;
+    private String userRoles;
+    private boolean isActive;
 }

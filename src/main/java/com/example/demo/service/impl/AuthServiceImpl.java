@@ -37,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
         user.setIdNumber(signUpRequest.getIdNumber());
         user.setUserRoles(signUpRequest.getUserRoles());
+        user.setActive(false);
 
         userRepository.save(user);
 
@@ -49,9 +50,10 @@ public class AuthServiceImpl implements AuthService {
                 .orElse(null);
 
         if (user == null || !signInRequest.getPassword().equals(user.getPassword())) {
-            return new SignInResponse("Invalid username or password", null, false);
+            return new SignInResponse("Invalid username or password", null, false, null, false);
         }
 
-        return new SignInResponse("Login successful", user.getUsername(), true);
+        return new SignInResponse("Login successful", user.getUsername(), true,
+                user.getUserRoles(), user.isActive());
     }
 }
