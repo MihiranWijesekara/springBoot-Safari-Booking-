@@ -2,10 +2,13 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.UserGuideResponse;
 import com.example.demo.dto.UserHotelResponse;
+import com.example.demo.dto.UserSafariResponse;
 import com.example.demo.entity.GuideRegister;
 import com.example.demo.entity.HotelRegister;
+import com.example.demo.entity.VehicleRegister;
 import com.example.demo.repository.GuideRegisterRepository;
 import com.example.demo.repository.RegisterRepository;
+import com.example.demo.repository.VehicleRegisterRepository;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,9 @@ public class UserServiceIMPL implements UserService {
 
     @Autowired
     private  GuideRegisterRepository guideRegisterRepository;
+
+    @Autowired
+    private VehicleRegisterRepository vehicleRegisterRepository;
 
     @Autowired
     public UserServiceIMPL(RegisterRepository registerRepository) {
@@ -45,6 +51,17 @@ public class UserServiceIMPL implements UserService {
                 .collect(Collectors.toList());// Assuming you have a method to fetch guides
     }
 
+    @Override
+    public List<UserSafariResponse> findAllSafari() {
+        List <VehicleRegister> safari = vehicleRegisterRepository.findAll();
+
+        return safari.stream()
+                .map(this::convertToUserSafariResponse)
+                .collect(Collectors.toList());
+
+    }
+
+
     private UserHotelResponse convertToUserHotelResponse(HotelRegister hotel) {
         UserHotelResponse response = new UserHotelResponse();
         response.setFullDayFee(hotel.getFullDayFee());
@@ -62,7 +79,18 @@ public class UserServiceIMPL implements UserService {
         response.setHourlyRate(guide.getHourlyRate());
         response.setShortDescription(guide.getShortDescription());
 
-        // Map any additional fields if needed
+        return response;
+    }
+
+    private UserSafariResponse convertToUserSafariResponse(VehicleRegister vehical) {
+        UserSafariResponse response = new UserSafariResponse();
+
+        response.setVehicleRegNumber(vehical.getVehicleRegNumber());
+        response.setUsername(vehical.getUser().getUsername());
+        response.setHourlyRate(vehical.getHourlyRate());
+        response.setFullDayServiceRate(vehical.getFullDayServiceRate());
+        response.setVehicleType(vehical.getVehicleType());
+
         return response;
     }
 

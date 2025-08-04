@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UserGuideResponse;
 import com.example.demo.dto.UserHotelResponse;
+import com.example.demo.dto.UserSafariResponse;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,11 @@ public class UserController {
     @GetMapping("/guides")
     public List<UserGuideResponse> findAllGuides() {
         return userService.findAllGuides();
+    }
+
+    @GetMapping("/safari")
+    public List<UserSafariResponse> findAllSafari() {
+        return userService.findAllSafari();
     }
 
 
