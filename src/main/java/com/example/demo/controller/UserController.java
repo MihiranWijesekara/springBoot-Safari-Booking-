@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.UserGuideResponse;
 import com.example.demo.dto.UserHotelResponse;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class UserController {
     @GetMapping("/hotels")
     public List<UserHotelResponse> getAllHotels() {
         return userService.findAllHotels();
+    }
+
+    @GetMapping("/guides")
+    public List<UserGuideResponse> findAllGuides() {
+        return userService.findAllGuides();
     }
 
 
