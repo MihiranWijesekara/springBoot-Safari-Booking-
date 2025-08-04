@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "vehical_register")
-public class VehicalRegister {
+public class VehicleRegister {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

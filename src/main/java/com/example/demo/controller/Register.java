@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.dto.Guide_Register_Request;
-import com.example.demo.dto.Guide_Register_Response;
-import com.example.demo.dto.Hotel_Register_Request;
-import com.example.demo.dto.Hotel_Register_Response;
+import com.example.demo.dto.*;
 import com.example.demo.service.GuideRegisterService;
 import com.example.demo.service.RegisterService;
+import com.example.demo.service.VehicleRegisterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +14,13 @@ public class Register {
 
     private final RegisterService registerService;
     private final GuideRegisterService guideRegisterService;
+    private final VehicleRegisterService vehicleRegisterService;
 
     public Register(RegisterService registerService,
-                              GuideRegisterService guideRegisterService) {
+                              GuideRegisterService guideRegisterService, VehicleRegisterService vehicalRegisterService) {
         this.registerService = registerService;
         this.guideRegisterService = guideRegisterService;
+        this.vehicleRegisterService = vehicalRegisterService;
     }
 
     @PostMapping("/hotel")
@@ -41,5 +41,15 @@ public class Register {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/vehicle")
+    public ResponseEntity<Vehical_Register_Response> registerVehicle(
+            @RequestBody Vehicle_Register_Request request,
+            @RequestParam Long userId) {
+
+        Vehical_Register_Response response = vehicleRegisterService.vehicleRegister(request, userId);
+        return ResponseEntity.ok(response);
+    }
+
 }
+
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignInResponse {
     private String message;
-    private String username;
+    private String id;
     private boolean authenticated;
     private String userRoles;
     private boolean isActive;

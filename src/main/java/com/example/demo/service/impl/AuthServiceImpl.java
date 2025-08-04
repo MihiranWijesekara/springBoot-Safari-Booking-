@@ -46,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public SignInResponse signIn(SignInRequest signInRequest) {
+        // Assuming signInRequest has getUsernameOrEmail() method
         User user = userRepository.findByUsername(signInRequest.getUsername())
                 .orElse(null);
 
@@ -53,7 +54,10 @@ public class AuthServiceImpl implements AuthService {
             return new SignInResponse("Invalid username or password", null, false, null, false);
         }
 
-        return new SignInResponse("Login successful", user.getUsername(), true,
-                user.getUserRoles(), user.isActive());
+        return new SignInResponse("Login successful",
+                String.valueOf(user.getId()),  // Convert Long id to String
+                true,
+                user.getUserRoles(),
+                user.isActive());
     }
 }
