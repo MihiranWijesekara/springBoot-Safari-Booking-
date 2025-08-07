@@ -1,18 +1,17 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.GuideBookingRequest;
 import com.example.demo.dto.UserGuideResponse;
 import com.example.demo.dto.UserHotelResponse;
 import com.example.demo.dto.UserSafariResponse;
-import com.example.demo.entity.GuideRegister;
-import com.example.demo.entity.HotelRegister;
-import com.example.demo.entity.VehicleRegister;
-import com.example.demo.repository.GuideRegisterRepository;
-import com.example.demo.repository.RegisterRepository;
-import com.example.demo.repository.VehicleRegisterRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +26,12 @@ public class UserServiceIMPL implements UserService {
 
     @Autowired
     private VehicleRegisterRepository vehicleRegisterRepository;
+
+    @Autowired
+    private GuideBookRepository guideBookRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     public UserServiceIMPL(RegisterRepository registerRepository) {
@@ -92,6 +97,48 @@ public class UserServiceIMPL implements UserService {
         response.setVehicleType(vehical.getVehicleType());
 
         return response;
+    }
+
+    @Override
+    public GuideBook createGuideBooking(GuideBookingRequest bookingRequest) {
+        // 1. Validate booking date is not in the past
+        LocalDate bookingDate;
+        try {
+            bookingDate = LocalDate.parse(bookingRequest.getBookingDate());
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException("Invalid date format. Please use YYYY-MM-DD");
+        }
+
+        if (bookingDate.isBefore(LocalDate.now())) {
+            throw new RuntimeException("Cannot book for past dates");
+        }
+
+        // 2. Check for existing booking for this user on this date
+        if (bookingRequest.getUserId() != null) {
+            boolean bookingExists = guideBookRepository.existsByUser_IdAndBookingDate(
+                    bookingRequest.getUserId(),
+                    bookingRequest.getBookingDate()
+            );
+
+            if (bookingExists) {
+                throw new RuntimeException("You already have a booking for this date");
+            }
+
+
+        }
+
+        // 3. Create new booking
+        GuideBook booking = new GuideBook();
+        booking.setFullName(bookingRequest.getFullName());
+        booking.setNicNumber(bookingRequest.getNicNumber());
+        booking.setMobileNumber(bookingRequest.getMobileNumber());
+        booking.setBookingDate(bookingRequest.getBookingDate());
+
+        User user = userRepository.findById(bookingRequest.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        booking.setUser(user);
+
+        return guideBookRepository.save(booking);
     }
 
 }
