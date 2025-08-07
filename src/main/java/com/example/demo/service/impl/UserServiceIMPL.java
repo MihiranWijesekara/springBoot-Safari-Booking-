@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 public class UserServiceIMPL implements UserService {
 
     @Autowired
-    private  RegisterRepository registerRepository;
+    private RegisterRepository registerRepository;
 
     @Autowired
-    private  GuideRegisterRepository guideRegisterRepository;
+    private GuideRegisterRepository guideRegisterRepository;
 
     @Autowired
     private VehicleRegisterRepository vehicleRegisterRepository;
@@ -49,7 +49,7 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public List<UserGuideResponse> findAllGuides() {
-        List <GuideRegister> guides = guideRegisterRepository.findAll();
+        List<GuideRegister> guides = guideRegisterRepository.findAll();
 
         return guides.stream()
                 .map(this::convertToUserGuideResponse)
@@ -58,7 +58,7 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public List<UserSafariResponse> findAllSafari() {
-        List <VehicleRegister> safari = vehicleRegisterRepository.findAll();
+        List<VehicleRegister> safari = vehicleRegisterRepository.findAll();
 
         return safari.stream()
                 .map(this::convertToUserSafariResponse)
@@ -101,44 +101,24 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public GuideBook createGuideBooking(GuideBookingRequest bookingRequest) {
-        // 1. Validate booking date is not in the past
-        LocalDate bookingDate;
-        try {
-            bookingDate = LocalDate.parse(bookingRequest.getBookingDate());
-        } catch (DateTimeParseException e) {
-            throw new RuntimeException("Invalid date format. Please use YYYY-MM-DD");
-        }
-
+        // Validate date is in the future
+        LocalDate bookingDate = LocalDate.parse(bookingRequest.getBookingDate());
         if (bookingDate.isBefore(LocalDate.now())) {
             throw new RuntimeException("Cannot book for past dates");
         }
 
-        // 2. Check for existing booking for this user on this date
-        if (bookingRequest.getUserId() != null) {
-            boolean bookingExists = guideBookRepository.existsByUser_IdAndBookingDate(
-                    bookingRequest.getUserId(),
-                    bookingRequest.getBookingDate()
-            );
-
-            if (bookingExists) {
-                throw new RuntimeException("You already have a booking for this date");
-            }
-
-
-        }
-
-        // 3. Create new booking
         GuideBook booking = new GuideBook();
         booking.setFullName(bookingRequest.getFullName());
         booking.setNicNumber(bookingRequest.getNicNumber());
         booking.setMobileNumber(bookingRequest.getMobileNumber());
         booking.setBookingDate(bookingRequest.getBookingDate());
 
-        User user = userRepository.findById(bookingRequest.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        booking.setUser(user);
+        if (bookingRequest.getUserId() != null) {
+            User user = userRepository.findById(bookingRequest.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            booking.setUser(user);
+        }
 
         return guideBookRepository.save(booking);
     }
-
 }

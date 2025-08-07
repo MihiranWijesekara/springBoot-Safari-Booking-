@@ -5,6 +5,7 @@ import com.example.demo.entity.User;
 import lombok.Data;
 
 @Data
+
 public class GuideBookingRequest {
     private String fullName;
     private String nicNumber;
