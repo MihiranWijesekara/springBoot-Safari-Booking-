@@ -97,5 +97,14 @@ public class UserController {
         return ResponseEntity.ok(responses);
     }
 
+    @GetMapping("/user-safari-bookings")
+    public ResponseEntity<List<SafariBookingResponse>> getUserSafariBookings(
+            @RequestParam Long userId) {
+
+        List<SafariBookingResponse> responses = userService.findAllBookingSafari(userId);
+        return ResponseEntity.ok(responses);
+    }
+
+
 
 }

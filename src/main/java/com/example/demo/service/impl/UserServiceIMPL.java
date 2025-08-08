@@ -190,4 +190,21 @@ public class UserServiceIMPL implements UserService {
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    public List<SafariBookingResponse> findAllBookingSafari(Long userId) {
+        List<SafariVehicalBook> bookings = safariBookRepository.findByUserId(userId);
+
+        return bookings.stream()
+                .map(booking -> {
+                    SafariBookingResponse response = new SafariBookingResponse();
+                    response.setFullName(booking.getFullName());
+                    response.setNicNumber(booking.getNicNumber());
+                    response.setMobileNumber(booking.getMobileNumber());
+                    response.setBookingDate(booking.getBookingDate().toString()); // format as needed
+                    return response;
+                })
+                .collect(Collectors.toList());
+
+    }
 }

@@ -18,6 +18,7 @@ public interface UserService {
     HotelBook createHotelBooking(HotelBookingRequest hotelBookingRequest);
 
     List<GuideBookResponse> findAllBookingGuides(Long userId);
+    List<SafariBookingResponse> findAllBookingSafari(Long userId);
 
 
 }
