@@ -23,8 +23,8 @@ public class HotelBook {
     private int fullDayFee;
     private int nightFee;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
 }
