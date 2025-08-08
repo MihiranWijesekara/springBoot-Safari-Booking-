@@ -1,9 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.GuideBookingRequest;
-import com.example.demo.dto.UserGuideResponse;
-import com.example.demo.dto.UserHotelResponse;
-import com.example.demo.dto.UserSafariResponse;
+import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.UserService;
@@ -29,6 +26,9 @@ public class UserServiceIMPL implements UserService {
 
     @Autowired
     private GuideBookRepository guideBookRepository;
+
+    @Autowired
+    private SafariBookRepository safariBookRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -120,5 +120,28 @@ public class UserServiceIMPL implements UserService {
         }
 
         return guideBookRepository.save(booking);
+    }
+
+    @Override
+    public SafariVehicalBook createSafariBooking(SafariBookingRequest safariBookingRequest) {
+        // Validate date is in the future
+        LocalDate bookingDate = LocalDate.parse(safariBookingRequest.getBookingDate());
+        if (bookingDate.isBefore(LocalDate.now())) {
+            throw new RuntimeException("Cannot book for past dates");
+        }
+
+        SafariVehicalBook booking = new SafariVehicalBook();
+        booking.setFullName(safariBookingRequest.getFullName());
+        booking.setNicNumber(safariBookingRequest.getNicNumber());
+        booking.setMobileNumber(safariBookingRequest.getMobileNumber());
+        booking.setBookingDate(safariBookingRequest.getBookingDate());
+
+        if (safariBookingRequest.getUserId() != null) {
+            User user = userRepository.findById(safariBookingRequest.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            booking.setUser(user);
+        }
+
+        return safariBookRepository.save(booking);
     }
 }

@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.dto.GuideBookingRequest;
-import com.example.demo.dto.UserGuideResponse;
-import com.example.demo.dto.UserHotelResponse;
-import com.example.demo.dto.UserSafariResponse;
+import com.example.demo.dto.*;
 import com.example.demo.entity.GuideBook;
+import com.example.demo.entity.SafariVehicalBook;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,6 +45,22 @@ public class UserController {
         try {
             GuideBook booking = userService.createGuideBooking(bookingRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(booking);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "error", "Booking failed",
+                            "message", e.getMessage(),
+                            "timestamp", LocalDateTime.now()
+                    )
+            );
+        }
+    }
+
+    @PostMapping("/safari-booking")
+    public ResponseEntity<?> bookSafari( @RequestBody SafariBookingRequest safariBookingRequest) {
+        try {
+            SafariVehicalBook Safaribooking = userService.createSafariBooking(safariBookingRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Safaribooking);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(
                     Map.of(
