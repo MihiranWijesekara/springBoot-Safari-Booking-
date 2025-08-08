@@ -31,6 +31,9 @@ public class UserServiceIMPL implements UserService {
     private SafariBookRepository safariBookRepository;
 
     @Autowired
+    private HotelBookRepository hotelBookRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -144,4 +147,31 @@ public class UserServiceIMPL implements UserService {
 
         return safariBookRepository.save(booking);
     }
+
+    @Override
+    public HotelBook createHotelBooking(HotelBookingRequest hotelBookingRequest) {
+        // Validate date is in the future
+        LocalDate bookingDate = LocalDate.parse(hotelBookingRequest.getBookingDate());
+        if (bookingDate.isBefore(LocalDate.now())) {
+            throw new RuntimeException("Cannot book for past dates");
+        }
+
+        HotelBook booking = new HotelBook();
+        booking.setFullName(hotelBookingRequest.getFullName());
+        booking.setNicNumber(hotelBookingRequest.getNicNumber());
+        booking.setMobileNumber(hotelBookingRequest.getMobileNumber());
+        booking.setBookingDate(hotelBookingRequest.getBookingDate());
+        booking.setFullDayFee(hotelBookingRequest.getFullDayFee());
+        booking.setNightFee(hotelBookingRequest.getNightFee());
+
+
+        if (hotelBookingRequest.getUserId() != null) {
+            User user = userRepository.findById(hotelBookingRequest.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            booking.setUser(user);
+        }
+
+        return hotelBookRepository.save(booking);
+    }
+
 }

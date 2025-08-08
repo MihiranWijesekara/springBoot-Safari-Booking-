@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.GuideBook;
+import com.example.demo.entity.HotelBook;
 import com.example.demo.entity.SafariVehicalBook;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,22 @@ public class UserController {
         try {
             SafariVehicalBook Safaribooking = userService.createSafariBooking(safariBookingRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(Safaribooking);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "error", "Booking failed",
+                            "message", e.getMessage(),
+                            "timestamp", LocalDateTime.now()
+                    )
+            );
+        }
+    }
+
+    @PostMapping("/hotel-booking")
+    public ResponseEntity<?> bookHotel( @RequestBody HotelBookingRequest hotelBookingRequest) {
+        try {
+            HotelBook hotelbooking = userService.createHotelBooking(hotelBookingRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(hotelbooking);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(
                     Map.of(
