@@ -161,9 +161,10 @@ public class UserServiceIMPL implements UserService {
         booking.setNicNumber(hotelBookingRequest.getNicNumber());
         booking.setMobileNumber(hotelBookingRequest.getMobileNumber());
         booking.setBookingDate(hotelBookingRequest.getBookingDate());
-        booking.setFullDayFee(hotelBookingRequest.getFullDayFee());
-        booking.setNightFee(hotelBookingRequest.getNightFee());
 
+        // Set boolean values for fullDay and night options
+        booking.setFullDayFee(hotelBookingRequest.getFullDayFee() == 1);
+        booking.setNightFee(hotelBookingRequest.getNightFee() == 1);
 
         if (hotelBookingRequest.getUserId() != null) {
             User user = userRepository.findById(hotelBookingRequest.getUserId())

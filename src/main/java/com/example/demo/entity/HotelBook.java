@@ -20,8 +20,8 @@ public class HotelBook {
     private String nicNumber;
     private String mobileNumber;
     private String bookingDate;
-    private int fullDayFee;
-    private int nightFee;
+    private boolean fullDayFee;
+    private boolean nightFee;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
