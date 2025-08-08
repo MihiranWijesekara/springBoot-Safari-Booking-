@@ -22,7 +22,7 @@ public class SafariVehicalBook {
     private String mobileNumber;
     private String bookingDate;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }
