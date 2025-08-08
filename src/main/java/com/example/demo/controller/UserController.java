@@ -89,4 +89,13 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user-guide-bookings")
+    public ResponseEntity<List<GuideBookResponse>> getUserGuideBookings(
+            @RequestParam Long userId) {
+
+        List<GuideBookResponse> responses = userService.findAllBookingGuides(userId);
+        return ResponseEntity.ok(responses);
+    }
+
+
 }
