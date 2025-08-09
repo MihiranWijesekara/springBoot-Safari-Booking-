@@ -6,9 +6,8 @@ import lombok.Data;
 @Data
 public class UserGuideResponse {
 
+    private Long guideId;
     private String Name;
-//    private String firstName;
-//    private String lastName;
     private int numberOfExperienceYears;
     private double hourlyRate;
     private String shortDescription;

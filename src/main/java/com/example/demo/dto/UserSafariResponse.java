@@ -9,5 +9,5 @@ public class UserSafariResponse {
     private double hourlyRate;
     private double fullDayServiceRate;
     private String vehicleType;
-    private String username;
+    private String Name;
 }

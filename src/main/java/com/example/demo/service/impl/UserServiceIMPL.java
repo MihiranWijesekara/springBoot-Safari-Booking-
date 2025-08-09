@@ -84,6 +84,7 @@ public class UserServiceIMPL implements UserService {
         response.setNumberOfExperienceYears(guide.getNumberOfExperienceYears());
         response.setHourlyRate(guide.getHourlyRate());
         response.setShortDescription(guide.getShortDescription());
+        response.setGuideId(guide.getUser().getId());
 
         // Combine first and last name
         String fullName = guide.getUser().getFirstName() + " " + guide.getUser().getLastName();
@@ -96,10 +97,13 @@ public class UserServiceIMPL implements UserService {
         UserSafariResponse response = new UserSafariResponse();
 
         response.setVehicleRegNumber(vehical.getVehicleRegNumber());
-        response.setUsername(vehical.getUser().getUsername());
         response.setHourlyRate(vehical.getHourlyRate());
         response.setFullDayServiceRate(vehical.getFullDayServiceRate());
         response.setVehicleType(vehical.getVehicleType());
+
+        // Combine first and last name
+        String fullName = vehical.getUser().getFirstName() + " " + vehical.getUser().getLastName();
+        response.setName(fullName);
 
         return response;
     }
