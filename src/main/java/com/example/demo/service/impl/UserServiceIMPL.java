@@ -82,9 +82,12 @@ public class UserServiceIMPL implements UserService {
     private UserGuideResponse convertToUserGuideResponse(GuideRegister guide) {
         UserGuideResponse response = new UserGuideResponse();
         response.setNumberOfExperienceYears(guide.getNumberOfExperienceYears());
-        response.setUsername(guide.getUser().getUsername());
         response.setHourlyRate(guide.getHourlyRate());
         response.setShortDescription(guide.getShortDescription());
+
+        // Combine first and last name
+        String fullName = guide.getUser().getFirstName() + " " + guide.getUser().getLastName();
+        response.setName(fullName);  // Assuming you have a setName method in UserGuideResponse
 
         return response;
     }
