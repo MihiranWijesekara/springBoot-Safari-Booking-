@@ -105,6 +105,14 @@ public class UserController {
         return ResponseEntity.ok(responses);
     }
 
+    @GetMapping("/user-Hotel-bookings")
+    public ResponseEntity<List<HotelBookingResponse>> getUserHotelBookings(
+            @RequestParam Long userId) {
+
+        List<HotelBookingResponse> responses = userService.findAllBookingHotel(userId);
+        return ResponseEntity.ok(responses);
+    }
+
 
 
 }

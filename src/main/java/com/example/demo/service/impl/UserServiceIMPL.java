@@ -74,6 +74,7 @@ public class UserServiceIMPL implements UserService {
         response.setFullDayFee(hotel.getFullDayFee());
         response.setNightFee(hotel.getNightFee());
         response.setHotelName(hotel.getHotelName()); // Assuming the field is called 'name' in HotelRegister
+        response.setHotelId(hotel.getUser().getId());
 
         // Map any additional fields if needed
         return response;
@@ -100,6 +101,7 @@ public class UserServiceIMPL implements UserService {
         response.setHourlyRate(vehical.getHourlyRate());
         response.setFullDayServiceRate(vehical.getFullDayServiceRate());
         response.setVehicleType(vehical.getVehicleType());
+        response.setSafariId(vehical.getUser().getId());
 
         // Combine first and last name
         String fullName = vehical.getUser().getFirstName() + " " + vehical.getUser().getLastName();
@@ -121,6 +123,7 @@ public class UserServiceIMPL implements UserService {
         booking.setNicNumber(bookingRequest.getNicNumber());
         booking.setMobileNumber(bookingRequest.getMobileNumber());
         booking.setBookingDate(bookingRequest.getBookingDate());
+
 
         if (bookingRequest.getUserId() != null) {
             User user = userRepository.findById(bookingRequest.getUserId())
@@ -214,4 +217,30 @@ public class UserServiceIMPL implements UserService {
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    public List<HotelBookingResponse> findAllBookingHotel(Long userId) {
+        List<HotelBook> bookings = hotelBookRepository.findByUserId(userId);
+
+        return bookings.stream()
+                .map(booking -> {
+                    HotelBookingResponse response = new HotelBookingResponse();
+                    response.setFullName(booking.getFullName());
+                    response.setNicNumber(booking.getNicNumber());
+                    response.setMobileNumber(booking.getMobileNumber());
+                    response.setBookingDate(booking.getBookingDate().toString());
+
+                    // Set fees directly from the booking
+                    response.setFullDayFee(booking.isFullDayFee() ? 1 : 0);
+                    response.setNightFee(booking.isNightFee() ? 1 : 0);
+
+                    // Calculate booking type (1 for full day, 0 for night)
+                    int bookingType = booking.isFullDayFee() ? 1 : 0;
+                    response.setBookingType(bookingType);
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
+
 }

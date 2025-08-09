@@ -19,6 +19,7 @@ public interface UserService {
 
     List<GuideBookResponse> findAllBookingGuides(Long userId);
     List<SafariBookingResponse> findAllBookingSafari(Long userId);
+    List<HotelBookingResponse> findAllBookingHotel(Long userId);
 
 
 }
